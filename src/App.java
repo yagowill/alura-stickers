@@ -24,7 +24,12 @@ public class App {
         // exibir e manipular os dados
         for (Map<String,String> filme : listaDeFilmes) {
             System.out.println("\u001b[37m\u001b[45mAvaliação: " + filme.get("imDbRating") + "\u001b[m");
-            System.out.print("\u2B50");
+            Float classificacao = Float.parseFloat(filme.get("imDbRating"));
+            int numEstrelas = Math.round(classificacao);
+            for (int n = 1; n <= numEstrelas ; n++ ) {
+                System.out.print("\u2B50");
+            }
+            System.out.println();
             System.out.println("Title: " + "\u001b[1m" + filme.get("title") + "\u001b[m");
             System.out.println("Poster: " +"\u001b[1m" + filme.get("image") + "\u001b[m");
             System.out.println();
