@@ -1,11 +1,12 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Map;
-import java.lang.Integer;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -21,17 +22,20 @@ public class App {
         // extrair só os dados que interessam (titulo, poster, classificação)
         JsonParser parser = new JsonParser();
         List<Map<String, String>> listaDeFilmes = parser.parse(body); 
+        
         // exibir e manipular os dados
+        var geradoraDeFigurinhas = new GeradoraDeFigurinhas();
         for (Map<String,String> filme : listaDeFilmes) {
-            System.out.println("\u001b[37m\u001b[45mAvaliação: " + filme.get("imDbRating") + "\u001b[m");
-            Float classificacao = Float.parseFloat(filme.get("imDbRating"));
-            int numEstrelas = Math.round(classificacao);
-            for (int n = 1; n <= numEstrelas ; n++ ) {
-                System.out.print("\u2B50");
-            }
-            System.out.println();
-            System.out.println("Title: " + "\u001b[1m" + filme.get("title") + "\u001b[m");
-            System.out.println("Poster: " +"\u001b[1m" + filme.get("image") + "\u001b[m");
+            
+            String urlImagem = filme.get("image");
+            String titulo = filme.get("title");
+
+            InputStream inputStream = new URL(urlImagem).openStream();
+            String nomeArquivo = titulo + ".png";
+            
+            geradoraDeFigurinhas.cria(inputStream, nomeArquivo);
+
+            System.out.println(filme.get("title"));
             System.out.println();
         }
     }
